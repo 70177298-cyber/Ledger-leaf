@@ -1,6 +1,4 @@
-/* ============================================================
-   FAQ.JS — accordion behaviour for the Services page
-   ============================================================ */
+
 
 (function () {
     'use strict';
@@ -20,7 +18,6 @@
                     other.querySelector('.faq-item__q').setAttribute('aria-expanded', 'false');
                 });
 
-                // Toggle the clicked item
                 if (!isOpen) {
                     item.classList.add('is-open');
                     question.setAttribute('aria-expanded', 'true');

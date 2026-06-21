@@ -1,9 +1,4 @@
-/* ============================================================
-   CONTACT.JS
-   Client-side validation for the contact form.
-   No backend exists, so a successful submit just confirms
-   the message was "received" and resets the form.
-   ============================================================ */
+
 
 (function () {
     'use strict';
@@ -23,10 +18,6 @@
     const statusBox = document.getElementById('formStatus');
     const charCount = document.getElementById('charCount');
 
-    /**
-     * Validation rules per field. Each returns an error string,
-     * or an empty string when the value is valid.
-     */
     const validators = {
         fullName: function (value) {
             if (!value.trim()) return 'Please enter your name.';
@@ -62,9 +53,6 @@
         }
     };
 
-    /**
-     * Show or clear an error message for a single field.
-     */
     function setFieldError(name, errorMessage) {
         const input = fields[name];
         const errorEl = document.getElementById(name + 'Error');
@@ -130,7 +118,6 @@
         });
     });
 
-    // Handle form submission
     form.addEventListener('submit', function (event) {
         event.preventDefault();
         hideStatus();
@@ -146,7 +133,6 @@
                 return;
             }
 
-            // No backend is connected — simulate a successful send.
             const submittedName = fields.fullName.value.trim();
             showStatus('Thanks, ' + submittedName + '! Your message has been received. We will reply within two business days.', 'success');
 
@@ -157,7 +143,6 @@
             });
 
         } catch (error) {
-            // Defensive catch in case anything unexpected happens
             console.error('Contact form error:', error);
             showStatus('Something went wrong while sending your message. Please try again.', 'error');
         }

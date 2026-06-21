@@ -1,11 +1,4 @@
-/* ========================================
-   LEDGER & LEAF — EXPENSE TRACKER
-   Easy to understand code with clear comments
-   ======================================== */
 
-// ========================================
-// 1. DOM ELEMENTS - References to HTML elements
-// ========================================
 
 const expenseForm = document.getElementById('expenseForm');
 const amountInput = document.getElementById('amount');
@@ -19,7 +12,6 @@ const expenseCountElement = document.getElementById('expenseCount');
 const avgExpenseElement = document.getElementById('avgExpense');
 const formStatus = document.getElementById('formStatus');
 
-// Category → emoji lookup, used when rendering the table
 const CATEGORY_EMOJI = {
     Food: '🍔',
     Transport: '🚗',
@@ -30,45 +22,22 @@ const CATEGORY_EMOJI = {
     Other: '📌'
 };
 
-// ========================================
-// 2. STATE - Data management
-// ========================================
-
-// Array to store all expenses. Each expense is an object:
-// { id, amount, category, description, date }
 let expenses = [];
 
-// Chart.js instances, kept so we can destroy/recreate on update
 let categoryChart = null;
 let trendsChart = null;
 
-// ========================================
-// 3. INITIALIZATION - Run when page loads
-// ========================================
-
 function initializeApp() {
-    // Guard: only run on pages that actually have the tracker form
     if (!expenseForm) return;
 
-    // Default the date field to today
     dateInput.valueAsDate = new Date();
 
-    // Load any previously saved expenses
     loadExpenses();
 
-    // Paint the page with whatever data we have
     updateDisplay();
 }
 
-// ========================================
-// 4. DATA MANAGEMENT - Save and load data
-// ========================================
 
-/**
- * Load expenses from localStorage.
- * Wrapped in try/catch in case storage is disabled or the
- * saved data has become corrupted.
- */
 function loadExpenses() {
     try {
         const savedData = localStorage.getItem('ledgerLeafExpenses');
@@ -80,9 +49,6 @@ function loadExpenses() {
     }
 }
 
-/**
- * Save the current expenses array to localStorage.
- */
 function saveExpenses() {
     try {
         localStorage.setItem('ledgerLeafExpenses', JSON.stringify(expenses));
@@ -92,10 +58,6 @@ function saveExpenses() {
     }
 }
 
-// ========================================
-// 5. VALIDATION
-// ========================================
-
 /**
  * Validate the add-expense form.
  * @returns {boolean} true if every field passes
@@ -103,27 +65,23 @@ function saveExpenses() {
 function validateExpenseForm() {
     let isValid = true;
 
-    // Clear previous errors first
     ['amount', 'category', 'date'].forEach(function (field) {
         const errorEl = document.getElementById(field + 'Error');
         if (errorEl) errorEl.textContent = '';
         document.getElementById(field).classList.remove('is-invalid');
     });
 
-    // Amount: required, must be a positive number
     const amountValue = parseFloat(amountInput.value);
     if (!amountInput.value || isNaN(amountValue) || amountValue <= 0) {
         setError('amount', 'Enter an amount greater than ₨0.');
         isValid = false;
     }
 
-    // Category: required
     if (!categoryInput.value) {
         setError('category', 'Please choose a category.');
         isValid = false;
     }
 
-    // Date: required, and shouldn't be in the future
     if (!dateInput.value) {
         setError('date', 'Please choose a date.');
         isValid = false;
@@ -151,7 +109,6 @@ function showFormStatus(message, type) {
     if (!formStatus) return;
     formStatus.textContent = message;
     formStatus.className = 'form__status is-visible form__status--' + type;
-    // Auto-hide success messages after a few seconds
     if (type === 'success') {
         setTimeout(function () {
             formStatus.className = 'form__status';
@@ -159,9 +116,6 @@ function showFormStatus(message, type) {
     }
 }
 
-// ========================================
-// 6. EVENT LISTENERS - Handle user actions
-// ========================================
 
 if (expenseForm) {
     expenseForm.addEventListener('submit', function (event) {
@@ -173,9 +127,8 @@ if (expenseForm) {
                 return;
             }
 
-            // Create new expense object
             const newExpense = {
-                id: Date.now(), // Unique ID using timestamp
+                id: Date.now(), 
                 amount: parseFloat(amountInput.value),
                 category: categoryInput.value,
                 description: descriptionInput.value.trim(),
@@ -185,7 +138,6 @@ if (expenseForm) {
             expenses.push(newExpense);
             saveExpenses();
 
-            // Reset the form for the next entry
             expenseForm.reset();
             dateInput.valueAsDate = new Date();
 
@@ -203,9 +155,6 @@ if (categoryFilterSelect) {
     categoryFilterSelect.addEventListener('change', updateDisplay);
 }
 
-// ========================================
-// 7. EXPENSE OPERATIONS - Add, delete, filter
-// ========================================
 
 /**
  * Delete an expense by ID, after the user confirms.
@@ -233,19 +182,12 @@ function getFilteredExpenses() {
     return expenses.filter(function (expense) { return expense.category === selectedCategory; });
 }
 
-// ========================================
-// 8. DISPLAY UPDATES - Update UI with data
-// ========================================
-
 function updateDisplay() {
     updateStatistics();
     updateExpensesTable();
     updateCharts();
 }
 
-/**
- * Update the three summary stat boxes.
- */
 function updateStatistics() {
     const filtered = getFilteredExpenses();
     const total = filtered.reduce(function (sum, expense) { return sum + expense.amount; }, 0);
@@ -257,19 +199,12 @@ function updateStatistics() {
     if (avgExpenseElement) avgExpenseElement.textContent = '\u20A8' + average.toFixed(2);
 }
 
-/**
- * Escape a string for safe insertion into innerHTML.
- * Protects against accidental HTML injection from descriptions.
- */
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
 }
 
-/**
- * Rebuild the expenses table from the current (filtered) data.
- */
 function updateExpensesTable() {
     if (!expensesContainer) return;
 
@@ -311,18 +246,11 @@ function updateExpensesTable() {
     expensesContainer.innerHTML = html;
 }
 
-// ========================================
-// 9. CHARTS - Visual breakdown of spending
-// ========================================
-
 function updateCharts() {
     updateCategoryChart();
     updateTrendsChart();
 }
 
-/**
- * Doughnut chart: total spending per category (all-time, unfiltered).
- */
 function updateCategoryChart() {
     const canvas = document.getElementById('categoryChart');
     if (!canvas || typeof Chart === 'undefined') return;
@@ -356,9 +284,6 @@ function updateCategoryChart() {
     });
 }
 
-/**
- * Line chart: total spending per day over the last 7 days.
- */
 function updateTrendsChart() {
     const canvas = document.getElementById('trendsChart');
     if (!canvas || typeof Chart === 'undefined') return;
@@ -416,8 +341,5 @@ function updateTrendsChart() {
     });
 }
 
-// ========================================
-// 10. START THE APPLICATION
-// ========================================
 
 document.addEventListener('DOMContentLoaded', initializeApp);

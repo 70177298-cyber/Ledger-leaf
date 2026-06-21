@@ -1,15 +1,8 @@
-/* ============================================================
-   SHARED.JS
-   Runs on every page: mobile nav toggle, active link highlight,
-   dynamic footer year.
-   ============================================================ */
+
 
 (function () {
     'use strict';
 
-    /**
-     * Highlight the nav link matching the current page.
-     */
     function setActiveNavLink() {
         const links = document.querySelectorAll('.nav__links a[data-page]');
         const current = document.body.getAttribute('data-page');
@@ -22,9 +15,6 @@
         });
     }
 
-    /**
-     * Wire up the mobile hamburger toggle.
-     */
     function setupMobileNav() {
         const toggle = document.querySelector('.nav__toggle');
         const links = document.querySelector('.nav__links');
@@ -47,9 +37,6 @@
         });
     }
 
-    /**
-     * Stamp the current year into the footer automatically.
-     */
     function setFooterYear() {
         const yearEl = document.getElementById('footerYear');
         if (yearEl) {

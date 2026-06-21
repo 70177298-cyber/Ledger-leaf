@@ -1,6 +1,4 @@
-/* ============================================================
-   HOME PAGE
-   ============================================================ */
+
 
 .hero {
     padding: 64px 0 40px;
@@ -62,7 +60,6 @@
     color: var(--ink-soft);
 }
 
-/* The signature element: an animated, stamped ledger receipt */
 .receipt {
     background: var(--paper-card);
     border: 1px solid var(--line);
@@ -153,7 +150,6 @@
     box-shadow: 0 3px 8px rgba(0,0,0,0.2);
 }
 
-/* Trust strip */
 .trust-strip {
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
@@ -180,7 +176,6 @@
     font-size: 1.6rem;
 }
 
-/* Feature grid */
 .features-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -213,7 +208,6 @@
     font-size: 0.92rem;
 }
 
-/* Categories showcase */
 .cat-showcase {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -236,7 +230,6 @@
 .cat-tile__emoji { font-size: 1.5rem; margin-bottom: 8px; }
 .cat-tile h4 { font-size: 0.95rem; color: var(--ink); }
 
-/* CTA band */
 .cta-band {
     background: var(--ledger-green);
     border-radius: var(--radius-lg);
